@@ -11,7 +11,7 @@ class Directive extends React.Component{
                     title: 'hats',
                     imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
                     id: 1,
-                    path:'hats'
+                    path:'shop'
                   },
                   {
                     title: 'jackets',
