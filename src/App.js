@@ -8,18 +8,21 @@ const Error=()=>(
     <h1><center>Not Found</center></h1>
   </div>
 )
-const CheckId=(props)=>(
-  <div>
-    <h1>Id is:{props.match.params.id}</h1>
-  </div>
-)
+const Hats=(props)=>{
+  console.log("props is:",props)
+  return(
+    <div>
+      <h1>Id is:{props.match.params.id}</h1>
+    </div>  
+  )
+}
 
 function App() {
   return (
     <div>
       <Switch>
         <Route exact component={Homepage} path="/" />
-        <Route exact component={CheckId}  path="/checkId/:id"/>
+        <Route exact component={Hats}  path="/hats/:id"/>
         <Route exact component={Error} path="/*" />
       </Switch>
     </div>
