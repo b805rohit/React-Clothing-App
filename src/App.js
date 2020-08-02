@@ -6,6 +6,8 @@ import Shoppage from './pages/shop/Shop.component'
 import Header from "./components/header/header.component"
 import SignIn from "./pages/sign-in-sign-up/sign-in-sign-up.component"
 import { auth,createUserProfileDocuments } from "./firebase/firebase.utils"
+import { setCurrentUser } from "./redux/user/user-actions"
+import { connect } from "react-redux"
 
 const Error=()=>(
   <div>
@@ -14,21 +16,16 @@ const Error=()=>(
 )
 
 class App extends React.Component{
-  constructor(){
-    super()
-
-    this.state={
-      currentUser:null
-    }
-  }
   unsubscribeFromAuth=null
   
   componentDidMount(){
+    console.log(this.props)
+    const {setCurrentUser}=this.props
     this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=>{
     if(userAuth){   
       const userRef=await createUserProfileDocuments(userAuth)
         userRef.onSnapshot(snapShot=>{
-          this.setState({
+          setCurrentUser({
             currentUser:{
               id:snapShot.id,
             ...snapShot.data()
@@ -37,7 +34,7 @@ class App extends React.Component{
         })
       }
       else{
-        this.setState({currentUser:null})
+        setCurrentUser({currentUser:null})
       }
     })
 
@@ -49,16 +46,20 @@ class App extends React.Component{
   render(){
     return (
       <div>
-        <Header currentUser={this.state.currentUser}/>
-        <Switch>
-          <Route exact component={Homepage} path="/" />
-          <Route exact component={Shoppage}  path="/shop"/>
-          <Route exact component={SignIn}  path="/signIn"/>
-          <Route exact component={Error} path="/*" />
-        </Switch>
+          <Header/>
+          <Switch>
+            <Route exact component={Homepage} path="/" />
+            <Route exact component={Shoppage}  path="/shop"/>
+            <Route exact component={SignIn}  path="/signIn"/>
+            <Route exact component={Error} path="/*" />
+          </Switch>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToDispatch=dispatch=>({
+  setCurrentUser:user=>dispatch(setCurrentUser(user))
+})
+
+export default connect(null,mapStateToDispatch)(App);
