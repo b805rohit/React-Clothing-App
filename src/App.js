@@ -5,7 +5,7 @@ import Homepage from "./pages/homepage/Homepage.component"
 import Shoppage from './pages/shop/Shop.component'
 import Header from "./components/header/header.component"
 import SignIn from "./pages/sign-in-sign-up/sign-in-sign-up.component"
-import { auth } from "./firebase/firebase.utils"
+import { auth,createUserProfileDocuments } from "./firebase/firebase.utils"
 
 const Error=()=>(
   <div>
@@ -24,11 +24,23 @@ class App extends React.Component{
   unsubscribeFromAuth=null
   
   componentDidMount(){
-    this.unsubscribeFromAuth=auth.onAuthStateChanged(user=>{
-      this.setState({
-        currentUser:user
-      })
+    this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=>{
+    if(userAuth){   
+      const userRef=await createUserProfileDocuments(userAuth)
+        userRef.onSnapshot(snapShot=>{
+          this.setState({
+            currentUser:{
+              id:snapShot.id,
+            ...snapShot.data()
+            }
+          })
+        })
+      }
+      else{
+        this.setState({currentUser:null})
+      }
     })
+
   }
   componentWillUnmount(){
     this.unsubscribeFromAuth()
