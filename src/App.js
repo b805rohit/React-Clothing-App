@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Switch,Route } from 'react-router-dom'
+import { Switch,Route,Redirect } from 'react-router-dom'
 import Homepage from "./pages/homepage/Homepage.component"
 import Shoppage from './pages/shop/Shop.component'
 import Header from "./components/header/header.component"
@@ -26,15 +26,13 @@ class App extends React.Component{
       const userRef=await createUserProfileDocuments(userAuth)
         userRef.onSnapshot(snapShot=>{
           setCurrentUser({
-            currentUser:{
               id:snapShot.id,
             ...snapShot.data()
-            }
           })
         })
       }
       else{
-        setCurrentUser({currentUser:null})
+        setCurrentUser(null)
       }
     })
 
@@ -50,7 +48,8 @@ class App extends React.Component{
           <Switch>
             <Route exact component={Homepage} path="/" />
             <Route exact component={Shoppage}  path="/shop"/>
-            <Route exact component={SignIn}  path="/signIn"/>
+            <Route exact render={()=>
+              this.props.currentUser ? <Redirect to="/" /> : <SignIn /> } />
             <Route exact component={Error} path="/*" />
           </Switch>
       </div>
@@ -62,4 +61,8 @@ const mapStateToDispatch=dispatch=>({
   setCurrentUser:user=>dispatch(setCurrentUser(user))
 })
 
-export default connect(null,mapStateToDispatch)(App);
+const mapStateToProps=state=>({
+  currentUser:state.user.currentUser
+})
+
+export default connect(mapStateToProps,mapStateToDispatch)(App);
