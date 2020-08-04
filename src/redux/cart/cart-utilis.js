@@ -9,6 +9,18 @@ export const addItem=(cart,item)=>{
             }
     }):[...cart,{...item,quantity:1}]
 }
+
+export const decrementItemQuantity=(cart,item)=>{
+   const data=cart.find(d=> d.id===item.id)
+   return cart.map(d=>{
+      if(d.id===data.id){
+         return {...d,quantity:d.quantity-1}
+      }
+      else{
+         return d
+      }
+   })
+}
     // const index=cart.findIndex(d=> d.id===item.id)
     // if(index!==-1){
     //     const quantity=cart[index].quantity+1
