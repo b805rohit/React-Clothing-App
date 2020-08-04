@@ -1,58 +1,22 @@
 import React from 'react'
 import "./directive.styles.scss"
+import { connect } from "react-redux"
+import { createStructuredSelector } from "reselect"
+import { sectionSelector } from "../../redux/directory/directory-selector"
 import MenuItem from "../menu-item/MenuItem.component"
 
-class Directive extends React.Component{
-    constructor(){
-        super()
-        this.state={
-            section:[
-                {
-                    title: 'hats',
-                    imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
-                    id: 1,
-                    path:'shop'
-                  },
-                  {
-                    title: 'jackets',
-                    imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png',
-                    id: 2,
-                    path:''
-                  },
-                  {
-                    title: 'sneakers',
-                    imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-                    id: 3,
-                    path:''
-                  },
-                  {
-                    title: 'womens',
-                    imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png',
-                    size: 'large',
-                    id: 4,
-                    path:''
-                  },
-                  {
-                    title: 'mens',
-                    imageUrl: 'https://i.ibb.co/R70vBrQ/men.png',
-                    size: 'large',
-                    id: 5,
-                    path:''
-                  }          
-            ]
+const Directive=({section})=>(
+    <div className="directory-menu">
+        {
+            section.map(({id,...otherPropsData})=>(
+                <MenuItem key={id} {...otherPropsData}/>  
+            ))
         }
-    }
-    render(){
-        return(
-            <div className="directory-menu">
-                {
-                    this.state.section.map(({id,...otherPropsData})=>(
-                        <MenuItem key={id} {...otherPropsData}/>  
-                    ))
-                }
-            </div>  
-        )
-    }
-}
+    </div>  
+)
+    
+const mapStateToProps=createStructuredSelector({
+  section:sectionSelector
+})
 
-export default Directive
+export default connect(mapStateToProps)(Directive)
