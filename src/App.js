@@ -10,11 +10,6 @@ import Checkout from "./pages/checkout/checkout.component"
 import { setCurrentUser } from "./redux/user/user-actions"
 import { connect } from "react-redux"
 
-const Error=()=>(
-  <div>
-    <h1><center>Not Found</center></h1>
-  </div>
-)
 
 class App extends React.Component{
   unsubscribeFromAuth=null
@@ -49,7 +44,6 @@ class App extends React.Component{
             <Route exact component={Homepage} path="/" />
             <Route component={Shoppage}  path="/shop"/>
             <Route exact component={Checkout} path="/checkout" />
-            <Route exact component={Error} path="/*" />
             <Route exact render={()=>
               this.props.currentUser ? <Redirect to="/" /> : <SignIn /> } />
           </Switch>

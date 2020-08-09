@@ -25,7 +25,7 @@ const Header = ({currentUser,cartHidden}) => {
         SIGN IN
       </Link>
       }
-      <Link className='option' to='/contact'>
+      <Link className='option'>
         CONTACT
       </Link>
       <CartIcon />
